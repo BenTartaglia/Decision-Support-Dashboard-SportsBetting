@@ -188,8 +188,8 @@ http://127.0.0.1:5000
 # Dashboard Preview
 
 <img width="1048" height="0795" alt="image" src="https://github.com/user-attachments/assets/7a20cbf9-0100-41ab-946e-51d05212113e" />
-###NOTE: Some information may be miscalculated - will handle during debugging
 
+### NOTE: Some information may be miscalculated - will handle during debugging
 
 Example dashboard output includes:
 
