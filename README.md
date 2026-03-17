@@ -187,7 +187,7 @@ http://127.0.0.1:5000
 
 # Dashboard Preview
 
-*(Insert screenshot here)*
+<img width="1048" height="0795" alt="image" src="https://github.com/user-attachments/assets/7a20cbf9-0100-41ab-946e-51d05212113e" />
 
 Example dashboard output includes:
 
@@ -287,6 +287,4 @@ Ben Tartaglia
 Penn State University
 
 Applied Data Science & Economics
-
-<img width="2048" height="1795" alt="image" src="https://github.com/user-attachments/assets/7a20cbf9-0100-41ab-946e-51d05212113e" />
 
