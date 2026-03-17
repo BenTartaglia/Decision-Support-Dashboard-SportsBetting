@@ -123,8 +123,8 @@ sports-betting-decision-dashboard
 Clone the repository:
 
 ```
-git clone https://github.com/BenTartaglia/Decision-Support-Dashboard-SportsBetting
-cd sports-betting-decision-dashboard
+git clone https://github.com/BenTartaglia/Decision-Support-Dashboard-SportsBetting.git
+cd Decision-Support-Dashboard-SportsBetting
 ```
 
 Install required packages:
@@ -183,6 +183,12 @@ Open your browser and navigate to:
 http://127.0.0.1:5000
 ```
 
+---
+# Important Note for Users
+
+This project runs locally using Flask and was tested using:
+**Python 3.10+**
+TensorFlow is not required for the XGBoost model used in this project, so the dashboard will run even if TensorFlow installation fails.
 ---
 
 # Dashboard Preview
