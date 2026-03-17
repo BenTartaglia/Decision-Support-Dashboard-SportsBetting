@@ -293,5 +293,8 @@ Potential extensions include:
 # Author
 
 Ben Tartaglia
+
 Penn State University
+
 Applied Data Science & Economics
+<img width="2048" height="1795" alt="86b69608-bc73-46cd-9411-1cc62ca517e6" src="https://github.com/user-attachments/assets/a329d9e3-8076-4421-862f-6be0f01041a4" />
