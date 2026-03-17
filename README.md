@@ -1,12 +1,3 @@
-# Decision-Support-Dashboard-SportsBetting
-Machine learning sports betting decision-support dashboard that integrates predictive modeling with sportsbook odds to identify value bets. Uses XGBoost win probability predictions, expected value analysis, Kelly Criterion bet sizing, and bankroll simulation, presented through an interactive Flask dashboard for data-driven betting insights.
-
-Below is a **complete, clean, copy-paste `README.md`** designed for your **final dashboard repo**. It is written in a **professional but clear tone**, explains the project well for graders, and includes **setup instructions, architecture, and visuals placeholders**.
-
-You can paste this **directly into GitHub**.
-
----
-
 # Sports Betting Decision Support Dashboard
 
 A machine learning–driven sports betting analytics dashboard that integrates predictive modeling with sportsbook odds to identify value bets and optimize betting strategy through expected value analysis and bankroll management.
