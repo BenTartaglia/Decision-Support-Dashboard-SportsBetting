@@ -276,12 +276,6 @@ This system can be used for:
 
 ---
 
-# Disclaimer
-
-This project is for educational and research purposes only.
-It is not intended as financial or gambling advice.
-
----
 
 # Future Improvements
 
