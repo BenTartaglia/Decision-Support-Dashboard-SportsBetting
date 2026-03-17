@@ -187,7 +187,10 @@ http://127.0.0.1:5000
 # Important Note for Users
 
 This project runs locally using Flask and was tested using:
+
 **Python 3.10+**
+
+
 TensorFlow is not required for the XGBoost model used in this project, so the dashboard will run even if TensorFlow installation fails.
 ---
 
