@@ -1,5 +1,7 @@
-# Sports Betting Decision Support Dashboard
+<img width="1040" height="1162" alt="image" src="https://github.com/user-attachments/assets/ab1759b9-0245-404e-9008-6623f1295ec1" />
 
+### NOTE: This is a current work-in-progess. Finalized version delivered in upcoming weeks.
+# Sports Betting Decision Support Dashboard
 A machine learning–driven sports betting analytics dashboard that integrates predictive modeling with sportsbook odds to identify value bets and optimize betting strategy through expected value analysis and bankroll management.
 
 The system combines model-generated win probabilities with market odds to highlight profitable opportunities and simulate betting strategies using the Kelly Criterion. The results are presented through an interactive Flask dashboard designed for decision-support analysis.
@@ -288,4 +290,6 @@ Ben Tartaglia
 Penn State University
 
 Applied Data Science & Economics
-<img width="2048" height="1795" alt="86b69608-bc73-46cd-9411-1cc62ca517e6" src="https://github.com/user-attachments/assets/a329d9e3-8076-4421-862f-6be0f01041a4" />
+
+<img width="2048" height="1795" alt="image" src="https://github.com/user-attachments/assets/7a20cbf9-0100-41ab-946e-51d05212113e" />
+
