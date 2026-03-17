@@ -274,9 +274,6 @@ This system can be used for:
 
 Potential extensions include:
 
-* real-time odds API integration
-* additional machine learning models
-* Monte Carlo bankroll simulations
 * portfolio-style bet optimization
 * automated daily predictions
 * advanced risk metrics
