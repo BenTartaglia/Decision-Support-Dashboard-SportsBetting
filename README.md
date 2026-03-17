@@ -120,6 +120,7 @@ sports-betting-decision-dashboard
 
 # Installation
 
+### For simplicity & efficiency, run in VS Code or other desired Terminal environment
 Clone the repository:
 
 ```
