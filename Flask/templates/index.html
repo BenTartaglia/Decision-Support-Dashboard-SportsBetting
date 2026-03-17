@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Decision-Intelligence Sports Betting Dashboard</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+  <div class="page-wrap">
+    <header class="page-header">
+      <div class="meta-left">Ben Tartaglia</div>
+      <div class="title-wrap">
+        <div class="main-title"><span>Decision-Intelligence Sports Betting</span></div>
+        <div class="sub-title">Dashboard</div>
+      </div>
+      <div class="meta-right">Created with Flask</div>
+    </header>
+
+    <section class="toolbar box">
+      <form method="get" class="toolbar-form">
+        <label>Sportsbook
+          <select name="sportsbook" onchange="this.form.submit()">
+            {% for book in ['fanduel','draftkings','betmgm'] %}
+            <option value="{{ book }}" {% if dashboard.sportsbook == book %}selected{% endif %}>{{ book|capitalize }}</option>
+            {% endfor %}
+          </select>
+        </label>
+        <label>Featured Matchup
+          <select name="game" onchange="this.form.submit()">
+            {% for game in dashboard.games %}
+            <option value="{{ game.id }}" {% if selected and game.id == selected.id %}selected{% endif %}>{{ game.away_team }} @ {{ game.home_team }}</option>
+            {% endfor %}
+          </select>
+        </label>
+      </form>
+      <div class="toolbar-status">
+        <div><strong>Data source:</strong> {{ 'Live model run' if dashboard.source == 'live' else 'Demo fallback' }}</div>
+        {% if dashboard.error_message %}<div class="hint">Live pull unavailable, so the dashboard loaded a reliable demo dataset instead.</div>{% endif %}
+      </div>
+    </section>
+
+    {% if selected %}
+    <section class="top-grid">
+      <div class="box metric-box">
+        <h2>Game Predictions</h2>
+        <p class="matchup">{{ selected.away_team }} VS {{ selected.home_team }}</p>
+        <p>Win Prob. {{ selected.away_team }}: <span class="green">{{ selected.away_prob }}%</span></p>
+        <p>Win Prob. {{ selected.home_team }}: <span class="gold">{{ selected.home_prob }}%</span></p>
+        <p>Model Confidence: <span class="green">{{ selected.model_confidence }}</span></p>
+      </div>
+
+      <div class="box metric-box">
+        <h2>Expected Value Analysis</h2>
+        <p>Market Odds: <strong>{% if selected.market_odds > 0 %}+{% endif %}{{ selected.market_odds }}</strong></p>
+        <p>Implied Prob.: <strong>{{ selected.implied_prob }}%</strong></p>
+        <p>Model Prob.: <strong>{{ selected.model_prob }}%</strong></p>
+        <p>Expected Value: <strong>{% if selected.expected_value > 0 %}+{% endif %}{{ '%.3f'|format(selected.expected_value) }}</strong></p>
+        <p>EV Indicator: <span class="green">{{ selected.ev_indicator }}</span></p>
+      </div>
+
+      <div class="box metric-box">
+        <h2>Risk-Adjusted Bet Size</h2>
+        <p>Kelly: <strong>{{ selected.kelly }}%</strong></p>
+        <p>Fractional Kelly: <strong>{{ selected.fractional_kelly }}%</strong></p>
+        <p><em>Bankroll:</em> <span class="green">${{ selected.bankroll }}</span></p>
+        <p>Suggested Wager: <strong>${{ '%.2f'|format(selected.suggested_wager) }}</strong></p>
+        <p>Risk Level: <span class="purple">{{ selected.risk_level }}</span></p>
+      </div>
+    </section>
+
+    <section class="box simulation-box">
+      <h2>Bankroll Growth Simulation <span>(Flat VS Kelly VS Fractional Kelly)</span></h2>
+      <div class="simulation-content">
+        <div class="chart-card">
+          <svg viewBox="0 0 {{ selected.chart.width }} {{ selected.chart.height }}" class="chart-svg" role="img" aria-label="Bankroll growth simulation chart">
+            <rect x="0" y="0" width="{{ selected.chart.width }}" height="{{ selected.chart.height }}" fill="#f3f3f3" stroke="#999"></rect>
+            {% for y in [30, 70, 110, 150, 190] %}
+            <line x1="24" y1="{{ y }}" x2="356" y2="{{ y }}" stroke="#c8c8c8" stroke-width="1"></line>
+            {% endfor %}
+            {% for line in selected.chart.lines %}
+            <polyline points="{{ line.points }}" fill="none" stroke="{{ line.color }}" stroke-width="3"></polyline>
+            {% endfor %}
+          </svg>
+        </div>
+        <div class="simulation-notes">
+          <p><strong>X-axis:</strong> Number of Bets or Time</p>
+          <p><strong>Y-axis:</strong> Bankroll Value ($)</p>
+          <div class="legend-title">Multiple trendlines:</div>
+          <ul>
+            <li>Flat Betting Strategy</li>
+            <li>Kelly Strategy</li>
+            <li>Fractional Kelly Strategy</li>
+          </ul>
+          <p>- Higher Kelly exposure increases both growth and volatility.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="bottom-grid">
+      <div class="box info-box">
+        <h2>Risk Metrics</h2>
+        <ul>
+          <li>Volatility: {{ selected.volatility }}%</li>
+          <li>Max. Drawdown: {{ selected.max_drawdown }}%</li>
+          <li>Risk of Ruin %: {{ selected.risk_of_ruin }}%</li>
+          <li><span class="green">Avg. Return per bet: ${{ selected.avg_return_per_bet }}</span></li>
+        </ul>
+      </div>
+
+      <div class="box info-box">
+        <h2>Model Confidence &amp; Stability</h2>
+        <ul>
+          <li>Prediction Confidence Score: {{ selected.prediction_confidence_score }}</li>
+          <li>Variance of Prediction: {{ selected.variance_of_prediction }}</li>
+          <li><em>Recent Model Stability:</em> {{ selected.recent_model_stability }}</li>
+          <li>Uncertainty Warning: {{ selected.uncertainty_warning }}</li>
+        </ul>
+      </div>
+
+      <div class="box info-box">
+        <h2>Insights/Decisions Notes</h2>
+        <ul>
+          {% for note in selected.notes %}
+          <li>{{ note }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </section>
+    {% endif %}
+  </div>
+</body>
+</html>
