@@ -123,7 +123,7 @@ sports-betting-decision-dashboard
 Clone the repository:
 
 ```
-git clone https://github.com/YOUR_USERNAME/sports-betting-decision-dashboard.git
+git clone https://github.com/BenTartaglia/Decision-Support-Dashboard-SportsBetting
 cd sports-betting-decision-dashboard
 ```
 
