@@ -86,8 +86,9 @@ def simulate_bankroll(starting_bankroll: float, model_prob: float, market_odds: 
 
 
 def series_to_svg(series_map, width=520, height=280):
-    all_vals = [v for s in series_map.values() for v in s]
-    min_v, max_v = min(all_vals), max(all_vals)
+    all_vals = [v for series in series_map.values() for v in series]
+    min_v = min(all_vals)
+    max_v = max(all_vals)
     span = max(max_v - min_v, 1)
 
     colors = {
@@ -122,31 +123,38 @@ def series_to_svg(series_map, width=520, height=280):
             for i, v in enumerate(vals)
         )
 
-    # Y ticks
     y_ticks = []
     for i in range(5):
         frac = i / 4
         val = max_v - frac * span
         y_ticks.append({
             "label": f"${val:,.0f}",
-            "y": y_pos(val)
+            "y": round(y_pos(val), 1)
         })
 
-    # X ticks
-    sample_len = len(next(iter(series_map.values())))
+    sample_len = len(next(iter(series_map.values()))) if series_map else 0
     x_ticks = []
     for frac in [0, 0.25, 0.5, 0.75, 1]:
-        idx = round(frac * (sample_len - 1))
+        idx = round(frac * max(sample_len - 1, 0))
         x_ticks.append({
             "label": str(idx),
-            "x": x_pos(idx, sample_len)
+            "x": round(x_pos(idx, sample_len), 1) if sample_len else plot_left
         })
 
     legend = [
-        {"label": labels[k], "color": colors[k]}
-        for k in ["flat", "kelly", "fractional"]
-        if k in series_map
+        {"label": labels[name], "color": colors[name]}
+        for name in ["flat", "kelly", "fractional"]
+        if name in series_map
     ]
+
+    lines = []
+    for name, vals in series_map.items():
+        lines.append({
+            "name": name,
+            "label": labels.get(name, name.title()),
+            "color": colors.get(name, "#333333"),
+            "points": build_points(vals)
+        })
 
     return {
         "width": width,
@@ -160,15 +168,8 @@ def series_to_svg(series_map, width=520, height=280):
         "y_ticks": y_ticks,
         "x_ticks": x_ticks,
         "legend": legend,
-        "lines": [
-            {
-                "points": build_points(vals),
-                "color": colors[name]
-            }
-            for name, vals in series_map.items()
-        ],
+        "lines": lines,
     }
-
 
 def kelly_percent(model_prob: float, odds: int) -> float:
     b = odds / 100 if odds > 0 else 100 / abs(odds)
