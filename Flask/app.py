@@ -85,7 +85,7 @@ def simulate_bankroll(starting_bankroll: float, model_prob: float, market_odds: 
     return {"flat": flat, "kelly": full, "fractional": frac}
 
 
-def series_to_svg(series_map: Dict[str, List[float]], width: int = 520, height: int = 280) -> Dict[str, Any]:
+def series_to_svg(series_map, width=520, height=280):
     all_vals = [v for s in series_map.values() for v in s]
     min_v, max_v = min(all_vals), max(all_vals)
     span = max(max_v - min_v, 1)
@@ -95,6 +95,7 @@ def series_to_svg(series_map: Dict[str, List[float]], width: int = 520, height: 
         "kelly": "#263a9b",
         "fractional": "#4f8a3d",
     }
+
     labels = {
         "flat": "Flat Betting Strategy",
         "kelly": "Kelly Strategy",
@@ -105,45 +106,46 @@ def series_to_svg(series_map: Dict[str, List[float]], width: int = 520, height: 
     plot_right = width - 20
     plot_top = 20
     plot_bottom = height - 50
+
     plot_width = plot_right - plot_left
     plot_height = plot_bottom - plot_top
 
-    def x_pos(idx: int, total: int) -> float:
-        return plot_left + idx * plot_width / max(total - 1, 1)
+    def x_pos(i, total):
+        return plot_left + i * plot_width / max(total - 1, 1)
 
-    def y_pos(val: float) -> float:
-        return plot_bottom - ((val - min_v) / span) * plot_height
+    def y_pos(v):
+        return plot_bottom - ((v - min_v) / span) * plot_height
 
-    def points(vals: List[float]) -> str:
-        pts = []
-        for idx, val in enumerate(vals):
-            pts.append(f"{x_pos(idx, len(vals)):.1f},{y_pos(val):.1f}")
-        return " ".join(pts)
+    def build_points(vals):
+        return " ".join(
+            f"{x_pos(i, len(vals)):.1f},{y_pos(v):.1f}"
+            for i, v in enumerate(vals)
+        )
 
-    y_tick_count = 5
+    # Y ticks
     y_ticks = []
-    for i in range(y_tick_count):
-        frac = i / (y_tick_count - 1)
-        tick_val = max_v - frac * span
+    for i in range(5):
+        frac = i / 4
+        val = max_v - frac * span
         y_ticks.append({
-            "label": f"${tick_val:,.0f}",
-            "y": round(y_pos(tick_val), 1),
+            "label": f"${val:,.0f}",
+            "y": y_pos(val)
         })
 
-    sample_len = len(next(iter(series_map.values()))) if series_map else 0
-    x_tick_positions = [0, 0.25, 0.5, 0.75, 1.0]
+    # X ticks
+    sample_len = len(next(iter(series_map.values())))
     x_ticks = []
-    for frac in x_tick_positions:
-        idx = round(frac * max(sample_len - 1, 0))
+    for frac in [0, 0.25, 0.5, 0.75, 1]:
+        idx = round(frac * (sample_len - 1))
         x_ticks.append({
             "label": str(idx),
-            "x": round(x_pos(idx, sample_len), 1) if sample_len else plot_left,
+            "x": x_pos(idx, sample_len)
         })
 
     legend = [
-        {"label": labels[name], "color": colors[name]}
-        for name in ["flat", "kelly", "fractional"]
-        if name in series_map
+        {"label": labels[k], "color": colors[k]}
+        for k in ["flat", "kelly", "fractional"]
+        if k in series_map
     ]
 
     return {
@@ -160,10 +162,8 @@ def series_to_svg(series_map: Dict[str, List[float]], width: int = 520, height: 
         "legend": legend,
         "lines": [
             {
-                "name": name,
-                "label": labels[name],
-                "color": colors[name],
-                "points": points(vals),
+                "points": build_points(vals),
+                "color": colors[name]
             }
             for name, vals in series_map.items()
         ],
