@@ -197,7 +197,7 @@ TensorFlow is not required for the XGBoost model used in this project, so the da
 
 # Dashboard Preview
 
-<img width="1048" height="0795" alt="image" src="https://github.com/user-attachments/assets/7a20cbf9-0100-41ab-946e-51d05212113e" />
+<img width="1888" height="1674" alt="image" src="https://github.com/user-attachments/assets/7af9142f-9d54-4df3-8fb4-5e24a554454e" />
 
 ### NOTE: Some information may be miscalculated - will handle during debugging
 
