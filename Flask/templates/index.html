@@ -71,30 +71,113 @@
 
     <section class="box simulation-box">
       <h2>Bankroll Growth Simulation <span>(Flat VS Kelly VS Fractional Kelly)</span></h2>
+    
       <div class="simulation-content">
-        <div class="chart-card">
-          <svg viewBox="0 0 {{ selected.chart.width }} {{ selected.chart.height }}" class="chart-svg" role="img" aria-label="Bankroll growth simulation chart">
-            <rect x="0" y="0" width="{{ selected.chart.width }}" height="{{ selected.chart.height }}" fill="#f3f3f3" stroke="#999"></rect>
-            {% for y in [30, 70, 110, 150, 190] %}
-            <line x1="24" y1="{{ y }}" x2="356" y2="{{ y }}" stroke="#c8c8c8" stroke-width="1"></line>
+        <div class="chart-card chart-card-wide">
+          <svg viewBox="0 0 {{ selected.chart.width }} {{ selected.chart.height }}"
+               class="chart-svg"
+               role="img"
+               aria-label="Bankroll growth simulation chart">
+    
+            <!-- background -->
+            <rect x="0" y="0"
+                  width="{{ selected.chart.width }}"
+                  height="{{ selected.chart.height }}"
+                  fill="#f3f3f3"
+                  stroke="#999"></rect>
+    
+            <!-- horizontal grid lines + y tick labels -->
+            {% for tick in selected.chart.y_ticks %}
+            <line x1="{{ selected.chart.plot_left }}"
+                  y1="{{ tick.y }}"
+                  x2="{{ selected.chart.plot_right }}"
+                  y2="{{ tick.y }}"
+                  stroke="#c8c8c8"
+                  stroke-width="1"></line>
+            <text x="{{ selected.chart.plot_left - 8 }}"
+                  y="{{ tick.y + 4 }}"
+                  text-anchor="end"
+                  font-size="11"
+                  fill="#333">{{ tick.label }}</text>
             {% endfor %}
+    
+            <!-- axes -->
+            <line x1="{{ selected.chart.plot_left }}"
+                  y1="{{ selected.chart.plot_bottom }}"
+                  x2="{{ selected.chart.plot_right }}"
+                  y2="{{ selected.chart.plot_bottom }}"
+                  stroke="#444"
+                  stroke-width="1.5"></line>
+    
+            <line x1="{{ selected.chart.plot_left }}"
+                  y1="{{ selected.chart.plot_top }}"
+                  x2="{{ selected.chart.plot_left }}"
+                  y2="{{ selected.chart.plot_bottom }}"
+                  stroke="#444"
+                  stroke-width="1.5"></line>
+    
+            <!-- x ticks -->
+            {% for tick in selected.chart.x_ticks %}
+            <line x1="{{ tick.x }}"
+                  y1="{{ selected.chart.plot_bottom }}"
+                  x2="{{ tick.x }}"
+                  y2="{{ selected.chart.plot_bottom + 5 }}"
+                  stroke="#444"
+                  stroke-width="1"></line>
+            <text x="{{ tick.x }}"
+                  y="{{ selected.chart.plot_bottom + 18 }}"
+                  text-anchor="middle"
+                  font-size="11"
+                  fill="#333">{{ tick.label }}</text>
+            {% endfor %}
+    
+            <!-- axis labels -->
+            <text x="{{ (selected.chart.plot_left + selected.chart.plot_right) / 2 }}"
+                  y="{{ selected.chart.height - 10 }}"
+                  text-anchor="middle"
+                  font-size="12"
+                  fill="#111">
+              {{ selected.chart.x_label }}
+            </text>
+    
+            <text x="16"
+                  y="{{ selected.chart.height / 2 }}"
+                  text-anchor="middle"
+                  font-size="12"
+                  fill="#111"
+                  transform="rotate(-90 16 {{ selected.chart.height / 2 }})">
+              {{ selected.chart.y_label }}
+            </text>
+    
+            <!-- lines -->
             {% for line in selected.chart.lines %}
-            <polyline points="{{ line.points }}" fill="none" stroke="{{ line.color }}" stroke-width="3"></polyline>
+            <polyline points="{{ line.points }}"
+                      fill="none"
+                      stroke="{{ line.color }}"
+                      stroke-width="3"></polyline>
+            {% endfor %}
+    
+            <!-- legend inside chart -->
+            {% for legend_item in selected.chart.legend %}
+            {% set lx = selected.chart.plot_left + 10 + (loop.index0 * 145) %}
+            <line x1="{{ lx }}"
+                  y1="{{ selected.chart.plot_top + 10 }}"
+                  x2="{{ lx + 20 }}"
+                  y2="{{ selected.chart.plot_top + 10 }}"
+                  stroke="{{ legend_item.color }}"
+                  stroke-width="3"></line>
+            <text x="{{ lx + 26 }}"
+                  y="{{ selected.chart.plot_top + 14 }}"
+                  font-size="11"
+                  fill="#111">
+              {{ legend_item.label }}
+            </text>
             {% endfor %}
           </svg>
         </div>
-        <div class="simulation-notes">
-          <p><strong>X-axis:</strong> Number of Bets or Time</p>
-          <p><strong>Y-axis:</strong> Bankroll Value ($)</p>
-          <div class="legend-title">Multiple trendlines:</div>
-          <ul>
-            <li>Flat Betting Strategy</li>
-            <li>Kelly Strategy</li>
-            <li>Fractional Kelly Strategy</li>
-          </ul>
-          <p>- Higher Kelly exposure increases both growth and volatility.</p>
-        </div>
       </div>
+    
+      <p class="simulation-footnote">Higher Kelly exposure increases both growth and volatility.</p>
     </section>
 
     <section class="bottom-grid">
