@@ -281,7 +281,14 @@ def parse_stdout(stdout: str, sportsbook: str) -> Dict[str, Any]:
 
 
 def sample_payload() -> Dict[str, Any]:
-    return json.loads(SAMPLE_PATH.read_text())
+    payload = json.loads(SAMPLE_PATH.read_text())
+
+    for game in payload.get("games", []):
+        sims = game.get("simulation")
+        if sims:
+            game["chart"] = series_to_svg(sims)
+
+    return payload
 
 
 def fetch_dashboard_data(sportsbook: str) -> Dict[str, Any]:
