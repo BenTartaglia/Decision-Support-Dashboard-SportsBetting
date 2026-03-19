@@ -85,27 +85,86 @@ def simulate_bankroll(starting_bankroll: float, model_prob: float, market_odds: 
     return {"flat": flat, "kelly": full, "fractional": frac}
 
 
-def series_to_svg(series_map: Dict[str, List[float]], width: int = 380, height: int = 210, padding: int = 24) -> Dict[str, Any]:
+def series_to_svg(series_map: Dict[str, List[float]], width: int = 520, height: int = 280) -> Dict[str, Any]:
     all_vals = [v for s in series_map.values() for v in s]
     min_v, max_v = min(all_vals), max(all_vals)
     span = max(max_v - min_v, 1)
-    colors = {"flat": "#b04a3f", "kelly": "#263a9b", "fractional": "#4f8a3d"}
+
+    colors = {
+        "flat": "#b04a3f",
+        "kelly": "#263a9b",
+        "fractional": "#4f8a3d",
+    }
+    labels = {
+        "flat": "Flat Betting Strategy",
+        "kelly": "Kelly Strategy",
+        "fractional": "Fractional Kelly Strategy",
+    }
+
+    plot_left = 60
+    plot_right = width - 20
+    plot_top = 20
+    plot_bottom = height - 50
+    plot_width = plot_right - plot_left
+    plot_height = plot_bottom - plot_top
+
+    def x_pos(idx: int, total: int) -> float:
+        return plot_left + idx * plot_width / max(total - 1, 1)
+
+    def y_pos(val: float) -> float:
+        return plot_bottom - ((val - min_v) / span) * plot_height
 
     def points(vals: List[float]) -> str:
         pts = []
         for idx, val in enumerate(vals):
-            x = padding + idx * (width - 2 * padding) / max(len(vals) - 1, 1)
-            y = height - padding - ((val - min_v) / span) * (height - 2 * padding)
-            pts.append(f"{x:.1f},{y:.1f}")
+            pts.append(f"{x_pos(idx, len(vals)):.1f},{y_pos(val):.1f}")
         return " ".join(pts)
+
+    y_tick_count = 5
+    y_ticks = []
+    for i in range(y_tick_count):
+        frac = i / (y_tick_count - 1)
+        tick_val = max_v - frac * span
+        y_ticks.append({
+            "label": f"${tick_val:,.0f}",
+            "y": round(y_pos(tick_val), 1),
+        })
+
+    sample_len = len(next(iter(series_map.values()))) if series_map else 0
+    x_tick_positions = [0, 0.25, 0.5, 0.75, 1.0]
+    x_ticks = []
+    for frac in x_tick_positions:
+        idx = round(frac * max(sample_len - 1, 0))
+        x_ticks.append({
+            "label": str(idx),
+            "x": round(x_pos(idx, sample_len), 1) if sample_len else plot_left,
+        })
+
+    legend = [
+        {"label": labels[name], "color": colors[name]}
+        for name in ["flat", "kelly", "fractional"]
+        if name in series_map
+    ]
 
     return {
         "width": width,
         "height": height,
-        "min": round(min_v, 2),
-        "max": round(max_v, 2),
+        "plot_left": plot_left,
+        "plot_right": plot_right,
+        "plot_top": plot_top,
+        "plot_bottom": plot_bottom,
+        "x_label": "Number of Bets or Time",
+        "y_label": "Bankroll Value ($)",
+        "y_ticks": y_ticks,
+        "x_ticks": x_ticks,
+        "legend": legend,
         "lines": [
-            {"name": name, "color": colors[name], "points": points(vals)}
+            {
+                "name": name,
+                "label": labels[name],
+                "color": colors[name],
+                "points": points(vals),
+            }
             for name, vals in series_map.items()
         ],
     }
