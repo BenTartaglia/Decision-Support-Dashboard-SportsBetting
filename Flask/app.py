@@ -290,7 +290,7 @@ def sample_payload() -> Dict[str, Any]:
 
     return payload
 
-
+raise Exception("Forced failure for testing")
 def fetch_dashboard_data(sportsbook: str) -> Dict[str, Any]:
     cmd = ["python", "main.py", "-xgb", f"-odds={sportsbook}", "-kc"]
     env = os.environ.copy()
