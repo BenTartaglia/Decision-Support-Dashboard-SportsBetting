@@ -290,12 +290,13 @@ def sample_payload() -> Dict[str, Any]:
 
     return payload
 
-raise Exception("Forced failure for testing")
+
 def fetch_dashboard_data(sportsbook: str) -> Dict[str, Any]:
     cmd = ["python", "main.py", "-xgb", f"-odds={sportsbook}", "-kc"]
     env = os.environ.copy()
     env["PYTHONPATH"] = str(ROOT) + os.pathsep + env.get("PYTHONPATH", "")
     try:
+        raise Exception("Forced failure for testing")
         completed = subprocess.run(
             cmd, cwd=ROOT, env=env, capture_output=True, text=True, check=True, timeout=120
         )
