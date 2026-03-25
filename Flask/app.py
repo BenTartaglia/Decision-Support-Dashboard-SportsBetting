@@ -99,7 +99,7 @@ def series_to_svg(series_map, width=520, height=280):
 
     labels = {
         "flat": "Flat Betting Strategy",
-        "kelly": "Kelly Strategy",
+        #"kelly": "Kelly Strategy",
         "fractional": "Fractional Kelly Strategy",
     }
 
