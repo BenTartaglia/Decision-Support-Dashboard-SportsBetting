@@ -86,7 +86,7 @@ Displays volatility and risk exposure.
 ```
 sports-betting-decision-dashboard
 │
-├ Data
+├ Data.zip
 │   Historical game data and processed datasets
 │
 ├ Models
