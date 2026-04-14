@@ -1,4 +1,5 @@
 import os
+import zipfile
 import sys
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -29,6 +30,25 @@ TODAYS_GAMES_URL = "https://data.nba.com/data/10s/v2015/json/mobile_teams/nba/20
 DATA_URL = "https://stats.nba.com/stats/leaguedashteamstats?Conference=&DateFrom=&DateTo=&Division=&GameScope=&GameSegment=&Height=&ISTRound=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=0&PaceAdjust=N&PerMode=PerGame&Period=0&PlayerExperience=&PlayerPosition=&PlusMinus=N&Rank=N&Season=2025-26&SeasonSegment=&SeasonType=Regular%20Season&ShotClockRange=&StarterBench=&TeamID=0&TwoWay=0&VsConference=&VsDivision="
 SCHEDULE_PATH = "Data/nba-2025-UTC.csv"
 
+def ensure_data_extracted():
+    required_file = os.path.join(BASE_DIR, "Data", "nba-2025-UTC.csv")
+    zip_path = os.path.join(BASE_DIR, "Data.zip")
+
+    # If the needed file already exists, do nothing
+    if os.path.exists(required_file):
+        return
+
+    # If Data.zip exists, extract it into the repo root
+    if os.path.exists(zip_path):
+        print("Data folder not found. Extracting Data.zip...")
+        with zipfile.ZipFile(zip_path, "r") as zip_ref:
+            zip_ref.extractall(BASE_DIR)
+        print("Data.zip extracted successfully.")
+    else:
+        raise FileNotFoundError(
+            "Could not find required data. Expected either "
+            "'Data/nba-2025-UTC.csv' or 'Data.zip' in the project root."
+        )
 
 def create_todays_games_data(games, df, odds, schedule_df, today):
     match_data = []
@@ -92,8 +112,9 @@ def create_todays_games_data(games, df, odds, schedule_df, today):
 
 
 def load_schedule():
-    return pd.read_csv(SCHEDULE_PATH, parse_dates=['Date'], date_format='%d/%m/%Y %H:%M')
-
+    ensure_data_extracted()
+    schedule_path = os.path.join(BASE_DIR, SCHEDULE_PATH)
+    return pd.read_csv(schedule_path, parse_dates=['Date'], date_format='%d/%m/%Y %H:%M')
 
 def resolve_games(odds, sportsbook):
     if odds:
