@@ -122,11 +122,19 @@ sports-betting-decision-dashboard
 
 ### For simplicity & efficiency, run in VS Code or other desired Terminal environment
 ## NOTE: You MUST install git and python prior to the steps below
-Clone the repository:
+Esnure you are using Python 3.11:
+```
+python3.11 --version
+```
 
+Clone the repository:
 ```
 git clone https://github.com/BenTartaglia/Decision-Support-Dashboard-SportsBetting.git
 cd Decision-Support-Dashboard-SportsBetting
+```
+Setup a Virtual Environment:
+```
+python3.11 -m venv venv
 ```
 
 Install required packages:
